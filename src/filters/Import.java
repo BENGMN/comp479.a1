@@ -59,11 +59,21 @@ public class Import {
     		  right = i;
     		  StringBuilder term = new StringBuilder(right-left);
     	      term.append(data, left, right-left);
-		  
-  		      //  Dome some processing here to remove tags
-  		      //  Do some processing here to remove punctuation
-		      tokens.add(term.toString());
-		      Logger.getUniqueInstance().writeToLog(term.toString());
+		      String string_term = term.toString();
+    	      
+		      // Do some post-processing on the string to clean it up
+		      string_term = Punctuation.removeCharFromBeginning(string_term, "\"");
+    	      string_term = Punctuation.removeCharFromEnd(string_term, "\"");
+    	      string_term = Punctuation.removeCharFromBeginning(string_term, "+");
+    	      string_term = Punctuation.removeCharFromEnd(string_term, "+");
+    	      string_term = Punctuation.removeCharFromEnd(string_term, ",");
+    	      string_term = Punctuation.removeCharFromEnd(string_term, "-");
+    	      string_term = ReutersGarbage.remove(string_term);
+
+		      if (!string_term.isEmpty()) {
+    	        tokens.add(string_term);
+		        Logger.getUniqueInstance().writeToLog(string_term);
+		      }
 		      build_token = false;
 		      i--; // decrement the counter to make sure we don't skip ahead when for loop increments next. 
     		}
