@@ -64,6 +64,8 @@ public class Import {
 		      // Do some post-processing on the string to clean it up
 		      string_term = Punctuation.removeCharFromBeginning(string_term, "\"");
     	      string_term = Punctuation.removeCharFromEnd(string_term, "\"");
+    	      string_term = Punctuation.removeCharFromBeginning(string_term, "(");
+    	      string_term = Punctuation.removeCharFromEnd(string_term, ")");
     	      string_term = Punctuation.removeCharFromBeginning(string_term, "+");
     	      string_term = Punctuation.removeCharFromEnd(string_term, "+");
     	      string_term = Punctuation.removeCharFromEnd(string_term, ",");
