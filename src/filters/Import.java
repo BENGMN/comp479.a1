@@ -23,55 +23,57 @@ public class Import {
 	int file_size = (int) tmp.length();
 	Reader input = new BufferedReader(new InputStreamReader(new FileInputStream(tmp)));
 	char[] data = new char[file_size];
-			
+	
 	// Create an array list to store the tokens
 	ArrayList<String> tokens = new ArrayList<String>();
 
 	// Read the file
 	while (input.read(data, 0, file_size) != -1) {
-
-	  // Determine whether we are starting with whitespace
-	  boolean at_term = false;
-	  if (Character.isWhitespace(data[0]) || data[0] == '<' || data[0] == '>') {
-		  at_term = false;
-	  }
-	  else {
-		  at_term = true;
-	  }
-	  
-	  // Count HTML brackets. If the number is uneven we are in a tag.
-	  int brackets = 0;
 	  
 	  // Keep track of the bounds of tokens
 	  int left = 0, right = 0;
 			  
 	  // Iterate through the data stream
       for(int i = 0; i < data.length; i++) {
-        if (data[i] == '<') {
-        	brackets++;
-        	if (at_term == true) {
-        		at_term = false;
-                right = i;
-                StringBuilder term = new StringBuilder(right-left);
-        	    term.append(data, left, right-left);
-    		  
-      		    // Dome some processing here to remove tags
-      		    //  Do some processing here to remove punctuation
-    		    tokens.add(term.toString());
-    		    Logger.getUniqueInstance().writeToLog(term.toString());        		
-        	}
-        }
-        if (data[i] == '>') {
-        	brackets++;
-        	i++; // if we find the end of a tag we push the counter forward
-        	if (!Character.isWhitespace(data[i])) {
-        		at_term = true;
-        		left = i;
-        	}
-        }
+    	while(true) {
+    		if (data[i] == '<') {
+    	      while (data[i] != '>') {
+    		    i++;
+    		  }
+    		  i++;
+    		}
+    		if (data[i] != '<') {
+    		  break;
+    		}
+    	}
     	
-        // Only if we are not in a bracket do we consider the data
-        if (brackets % 2 == 0) {
+    	boolean build_token = false;
+    	
+    	if (!Character.isWhitespace(data[i])){
+    	    left = i;
+    		while(!Character.isWhitespace(data[i]) && data[i] != '<') {
+    		  i++;
+    		  build_token = true;
+    	    }
+    		while(build_token) {
+    		  right = i;
+    		  StringBuilder term = new StringBuilder(right-left);
+    	      term.append(data, left, right-left);
+		  
+  		      //  Dome some processing here to remove tags
+  		      //  Do some processing here to remove punctuation
+		      tokens.add(term.toString());
+		      Logger.getUniqueInstance().writeToLog(term.toString());
+		      build_token = false;
+		      i--; // decrement the counter to make sure we don't skip ahead when for loop increments next. 
+    		}
+    	}
+      }
+	}
+	return tokens;
+  }
+}
+    	/*
           // Find the beginning of a term
           if (!Character.isWhitespace(data[i]) && at_term == false) {
             at_term = true;
@@ -95,3 +97,4 @@ public class Import {
 	return tokens;
   }
 }
+*/

@@ -12,8 +12,9 @@ public class Driver {
 	public static void main(String[] args) {
 		// Set the location of the corpus
 		//File corpus = new File("/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters");
-        //File test_file = new File ("/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/reut2-000.sgm");
-        String test_file_1 = "/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/test-reut.sgm";
+        //S test_file_1 = new File ("/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/reut2-000.sgm");
+        //String test_file_1 = "/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/test-reut.sgm";
+        String test_file_1 = "/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/reut2-000.sgm";
 		//File test_file = new File ("/home/ben/Desktop/test.txt");
 		// Iterate through the files and perform the necessary actions
 		//File[] files = corpus.listFiles();
