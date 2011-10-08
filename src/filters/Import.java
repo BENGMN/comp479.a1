@@ -32,7 +32,7 @@ public class Import {
 	  
 	  // Keep track of the bounds of tokens
 	  int left = 0, right = 0;
-			  
+	  
 	  // Iterate through the data stream
       for(int i = 0; i < data.length; i++) {
     	while(true) {
@@ -62,14 +62,18 @@ public class Import {
 		      String string_term = term.toString();
     	      
 		      // Do some post-processing on the string to clean it up
+		      string_term = Punctuation.removeCharFromEnd(string_term, ".");
 		      string_term = Punctuation.removeCharFromBeginning(string_term, "\"");
     	      string_term = Punctuation.removeCharFromEnd(string_term, "\"");
     	      string_term = Punctuation.removeCharFromBeginning(string_term, "(");
     	      string_term = Punctuation.removeCharFromEnd(string_term, ")");
+    	      string_term = Punctuation.removeCharFromEnd(string_term, "?");
     	      string_term = Punctuation.removeCharFromBeginning(string_term, "+");
     	      string_term = Punctuation.removeCharFromEnd(string_term, "+");
     	      string_term = Punctuation.removeCharFromEnd(string_term, ",");
     	      string_term = Punctuation.removeCharFromEnd(string_term, "-");
+    	      string_term = Punctuation.removeCharFromEnd(string_term, ":");
+    	      string_term = Punctuation.removeCharFromEnd(string_term, ">");
     	      string_term = ReutersGarbage.remove(string_term);
 
 		      if (!string_term.isEmpty()) {
@@ -85,28 +89,3 @@ public class Import {
 	return tokens;
   }
 }
-    	/*
-          // Find the beginning of a term
-          if (!Character.isWhitespace(data[i]) && at_term == false) {
-            at_term = true;
-            left = i;
-          }
-          // Found the end of a token
-          if (Character.isWhitespace(data[i]) && at_term == true) {	
-            at_term = false;
-            right = i;
-            StringBuilder term = new StringBuilder(right-left);
-    	    term.append(data, left, right-left);
-		  
-  		    // Dome some processing here to remove tags
-  		    //  Do some processing here to remove punctuation
-		    tokens.add(term.toString());
-		    Logger.getUniqueInstance().writeToLog(term.toString());
-          }
-        }
-      }
-	}
-	return tokens;
-  }
-}
-*/
