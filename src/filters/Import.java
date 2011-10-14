@@ -13,6 +13,7 @@ import technical.Logger;
 public class Import {
 	
 	private File tmp = null;
+	//private String[] chars_to_strip = {".", "\"", "(", ")", "?", "+", ",", "-", ":", "<", ">", "{", "}"};
 	
 	public Import(String file) {
 		tmp = new File(file);
@@ -49,7 +50,7 @@ public class Import {
     	
     	boolean build_token = false;
     	
-    	if (!Character.isWhitespace(data[i])){
+    	if (!Character.isWhitespace(data[i])) {
     	    left = i;
     		while(!Character.isWhitespace(data[i]) && data[i] != '<') {
     		  i++;
@@ -62,19 +63,8 @@ public class Import {
 		      String string_term = term.toString();
     	      
 		      // Do some post-processing on the string to clean it up
-		      string_term = Punctuation.removeCharFromEnd(string_term, ".");
-		      string_term = Punctuation.removeCharFromBeginning(string_term, "\"");
-    	      string_term = Punctuation.removeCharFromEnd(string_term, "\"");
-    	      string_term = Punctuation.removeCharFromBeginning(string_term, "(");
-    	      string_term = Punctuation.removeCharFromEnd(string_term, ")");
-    	      string_term = Punctuation.removeCharFromEnd(string_term, "?");
-    	      string_term = Punctuation.removeCharFromBeginning(string_term, "+");
-    	      string_term = Punctuation.removeCharFromEnd(string_term, "+");
-    	      string_term = Punctuation.removeCharFromEnd(string_term, ",");
-    	      string_term = Punctuation.removeCharFromEnd(string_term, "-");
-    	      string_term = Punctuation.removeCharFromEnd(string_term, ":");
-    	      string_term = Punctuation.removeCharFromEnd(string_term, ">");
-    	      string_term = ReutersGarbage.remove(string_term);
+    	      string_term = Punctuation.removeCharFromBeginning(string_term);
+    	      string_term = Punctuation.removeCharFromEnd(string_term);
 
 		      if (!string_term.isEmpty()) {
     	        tokens.add(string_term);

@@ -32,7 +32,7 @@ public class Driver {
 				docList.put(f, fileID);
 				Import data = new Import(f.getAbsolutePath());
 				ArrayList<String> tokens = data.NoHTMLImport();
-				
+
 				for (String s : tokens) {
 				  if (postings.get(s) == null) {
 					  postings.put(s, new ArrayList<Integer>());
@@ -42,6 +42,7 @@ public class Driver {
 					  postings.get(s).add(fileID);
 				  }
 				}
+				
 				fileID++;	
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
