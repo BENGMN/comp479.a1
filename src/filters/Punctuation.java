@@ -2,16 +2,16 @@ package filters;
 
 public class Punctuation {
 	
-	//private static String[] CHARS_TO_STRIP = {".", "\"", "(", ")", "?", "+", ",", "-", ":", "<", ">", "{", "}"};
-
+	private static final String[] CHARS_TO_STRIP_B = {" ", ".", "\"", "(", ")", "?", "+", ",", "-", ":", "<", ">", "{", "}"};
+	private static final String[] CHARS_TO_STRIP_E = {" ", ".", "\"", "(", ")", "?", "+", ",", "-", ":", "<", ">", "{", "}"};
+	
 	public Punctuation() {}
 	
 	public static String removeCharFromBeginning(String input) {
-		String[] CHARS_TO_STRIP = {".", "\"", "(", ")", "?", "+", ",", "-", ":", "<", ">", "{", "}"};
 		int i = 0;
 		
 		while(i < input.length()) {
-			for (String s : CHARS_TO_STRIP) {
+			for (String s : CHARS_TO_STRIP_B) {
 				if(input.substring(i, i+1).equals(s)) {
 					i++;
 					if (i == input.length()) {
@@ -30,11 +30,10 @@ public class Punctuation {
 	}
 
 	public static String removeCharFromEnd(String input) {
-		String[] CHARS_TO_STRIP = {".", "\"", "(", ")", "?", "+", ",", "-", ":", "<", ">", "{", "}"};
 		int i = input.length();
 		// Important to check that i is > 0 before calling sub-string
 		while( i > 0) { //.equals(remove_char)) {
-			for(String s : CHARS_TO_STRIP) {
+			for(String s : CHARS_TO_STRIP_E) {
 				if  (input.substring(i-1,i).equals(s)) {
 					i--;
 					if (i == 0) {
