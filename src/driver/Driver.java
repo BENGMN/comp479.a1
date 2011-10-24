@@ -1,6 +1,5 @@
 package driver;
 
-import imports.Import;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+
+import documents.ReutersSGML;
+
 
 
 public class Driver {
@@ -30,7 +32,7 @@ public class Driver {
 		for(File f : files) {
 			try {
 				docList.put(f, fileID);
-				Import data = new Import(f.getAbsolutePath());
+				ReutersSGML data = new ReutersSGML(f.getAbsolutePath());
 				ArrayList<String> tokens = data.NoHTMLImport();
 
 				for (String s : tokens) {

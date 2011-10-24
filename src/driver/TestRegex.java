@@ -3,8 +3,8 @@ package driver;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import filters.Punctuation;
-import filters.ReutersGarbage;
+import filters.PunctuationFilter;
+import filters.ReutersFilter;
 
 public class TestRegex {
 
@@ -22,7 +22,7 @@ public class TestRegex {
 			//Pattern pattern = Pattern.compile(regex);
 			//Matcher matcher = pattern.matcher(six);
 			
-		System.out.println(ReutersGarbage.remove(five));
+		System.out.println(ReutersFilter.remove(five));
 			//System.out.println(matcher.matches());
 			//System.out.println(matcher.replaceAll(""));
 			
