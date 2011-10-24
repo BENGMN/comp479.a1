@@ -1,16 +1,18 @@
 package documents;
 
+import index.TermDictionary;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import filters.Filter;
 
 public abstract class AbstractDocument {
 	protected File f_handle = null;
-	protected HashMap<String, Integer> dictionary = null;
+	protected TermDictionary dictionary = null;
 	protected ArrayList<String> tokens = null;
 	protected ArrayList<Filter> filters = null;
+	private long file_id = 0;
 	
 	/**
 	 * To create a new document object you must specify a valid path
@@ -19,14 +21,15 @@ public abstract class AbstractDocument {
 	 */
 	public AbstractDocument(String path) throws NullPointerException {
 		this.f_handle = new File(path);
-		 dictionary = new HashMap<String, Integer>(1000);
+		 dictionary = new TermDictionary(1000);
 		 tokens = new ArrayList<String>(1000);
 		 filters = new ArrayList<Filter>(5);
+		 file_id = path.hashCode();
 	}
 	
 	public abstract void parse();
 	
-	public HashMap<String, Integer> getDictionary() {
+	public TermDictionary getDictionary() {
 		return this.dictionary;
 	}
 	
@@ -37,6 +40,10 @@ public abstract class AbstractDocument {
 	 */
 	public ArrayList<String> getTokens() {
 		return this.tokens;
+	}
+	
+	public long getDocumentID() {
+		return this.file_id;
 	}
 
 }

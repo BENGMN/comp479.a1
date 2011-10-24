@@ -90,8 +90,10 @@ public class ReutersSGML extends AbstractDocument {
 		          
 		          // If we're not left with an empty string we add it to the output
 			      if (!string_term.isEmpty()) {
-			        tokens.add(string_term.toLowerCase());
-			        Logger.getUniqueInstance().writeToLog(string_term);
+			    	String case_fold = string_term.toLowerCase();
+			    	this.tokens.add(case_fold); 
+			        this.dictionary.add(case_fold);
+			        Logger.getUniqueInstance().writeToLog(case_fold); //*** remove me
 			      }
 			      
 			      i--; // decrement the counter to make sure we don't skip ahead when for loop increments next.
@@ -100,6 +102,7 @@ public class ReutersSGML extends AbstractDocument {
 			}
 		  }
 		}
+		input.close();	// close the file handle
 		tokens.trimToSize(); // small optimization here
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
