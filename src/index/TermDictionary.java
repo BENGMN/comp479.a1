@@ -1,5 +1,6 @@
 package index;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -32,5 +33,21 @@ public class TermDictionary {
 			return (long) -1;
 		}
 		else return (long)this.dictionary.get(term);
+	}
+	
+	public ArrayList<Long> getAllTermIDs() {
+		ArrayList<Long> allIDs = new ArrayList<Long>(this.dictionary.size());
+		for (Long termID : this.dictionary.values()) {
+			allIDs.add(termID);
+		}
+		return allIDs;
+	}
+	
+	public ArrayList<String> getAllTerms() {
+		ArrayList<String> allTerms = new ArrayList<String>(this.dictionary.size());
+		for (String term : this.dictionary.keySet()) {
+			allTerms.add(term);
+		}
+		return allTerms;
 	}
 }
