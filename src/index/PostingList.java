@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.HashSet;
 
-import documents.AbstractDocument;
+import parsers.AbstractDocument;
+
 
 public class PostingList {
 	
@@ -30,14 +31,35 @@ public class PostingList {
 				// if the term is already present in our internal dictionary
 				// locate the hashset of docID's and append to it.
 				this.postings.get(this.internal_dictionary.getTermID(token)).add(documentID); 
-			}
 		}
+	}
+	
+	/**
+	 * Use this method to add a token to the dictionary alone
+	 * since no documentID is specified no addition to the postings list is possible
+	 * @param token
+	 */
+	
+	public void addToken(String token) {
+		if (this.internal_dictionary.getTermID(token) == -1) {
+			this.internal_dictionary.add(token);
+		}
+	}
 	
 	public boolean hasToken(String token) {
 		if (this.internal_dictionary.getTermID(token) == -1) {
 			return false;
 		}
 		else return true;
+	}
+	
+	/**
+	 * Get the tokenID from the dictionary
+	 * @param token
+	 * @return the tokenID is returned when the token is found. Otherwise -1 is returned 
+	 */
+	public Long getTokenID(String token) {
+		return this.internal_dictionary.getTermID(token);
 	}
 	
 	public ArrayList<String> getAllTerms() {
@@ -51,6 +73,11 @@ public class PostingList {
 	public void clearPostings() {
 		this.internal_dictionary = new TermDictionary();
 		this.postings = new TreeMap<Long, HashSet<Long>>();
+	}
+	
+	public Long[] getPostings(String token) {
+		Long[] postings = (Long[])this.postings.get(token).toArray();
+		return postings;
 	}
 	
 	public void addDocument(AbstractDocument document) {
