@@ -9,7 +9,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
 
-import parsers.ReutersSGML;
+import parsers.RoughXML;
 
 
 
@@ -43,7 +43,7 @@ public class Driver {
 			document_index.put(f.getAbsolutePath(), fileID);
 		
 			// For each document in the doc_index, tokenize it.
-			ReutersSGML reut = new ReutersSGML(f.getAbsolutePath(), fileID);
+			RoughXML reut = new RoughXML(f.getAbsolutePath(), fileID);
 			reut.parse();
 			System.out.println(f.getParent()+"/"+fileID+"\n");
 			System.out.println(f.getAbsolutePath()+"\n");

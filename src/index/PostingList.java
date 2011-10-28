@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.HashSet;
 
-import parsers.AbstractDocument;
+import tokenizer.ReutArticleTokenizer;
 
 
 public class PostingList {
@@ -80,7 +80,7 @@ public class PostingList {
 		return postings;
 	}
 	
-	public void addDocument(AbstractDocument document) {
+	public void addDocument(ReutArticleTokenizer document) {
 		//document_set.add(document);
 		
 		// get all of the tokens from the document

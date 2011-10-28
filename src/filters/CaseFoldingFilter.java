@@ -1,11 +1,21 @@
 package filters;
 
-public class CaseFoldingFilter implements Filter {
+public class CaseFoldingFilter implements IFilter {
 
+	private String upOrDown = "";
+	
+	public CaseFoldingFilter(String upOrDown) {
+		this.upOrDown = upOrDown;
+	}
+	
 	@Override
 	public String process(String term) {
-		// TODO Auto-generated method stub
-		return null;
+		if (this.upOrDown.equalsIgnoreCase("up")) {
+			return term.toUpperCase();
+		}
+		else {
+			return term.toLowerCase();	
+		}
 	}
 
 }

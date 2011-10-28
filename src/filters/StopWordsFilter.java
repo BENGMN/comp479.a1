@@ -1,6 +1,6 @@
 package filters;
 
-public class StopWordsFilter implements Filter {
+public class StopWordsFilter implements IFilter {
 // private static final String THIRTY = "the be to of and a in that have I it for not on with he as you do at this but his by from they we say her she";
 	private String[] stop_words = null;
 

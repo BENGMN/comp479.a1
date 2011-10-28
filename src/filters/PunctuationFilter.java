@@ -1,6 +1,6 @@
 package filters;
 
-public class PunctuationFilter implements Filter {
+public class PunctuationFilter implements IFilter {
 	
 	private static final String[] CHARS_TO_STRIP_B = {" ", ".", "\"", "(", ")", "?", "+", ",", "-", ":", "<", ">", "{", "}"};
 	private static final String[] CHARS_TO_STRIP_E = {" ", ".", "\"", "(", ")", "?", "+", ",", "-", ":", "<", ">", "{", "}"};

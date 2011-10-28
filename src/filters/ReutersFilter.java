@@ -3,7 +3,7 @@ package filters;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ReutersFilter implements Filter {
+public class ReutersFilter implements IFilter {
 
 	private static String REGEX_1 = "\\S*&#\\d+;";
 	private static String REGEX_2 = "\\S*&lt;\\S*";

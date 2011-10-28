@@ -11,7 +11,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 
 import technical.Logger;
-import filters.Filter;
+import filters.IFilter;
 import filters.PunctuationFilter;
 import filters.ReutersFilter;
 
@@ -20,13 +20,13 @@ public class TestParsing {
 	protected File f_handle = null;
 	protected TermDictionary dictionary = null;
 	protected ArrayList<String> tokens = null;
-	protected ArrayList<Filter> filters = null;
+	protected ArrayList<IFilter> filters = null;
 	
 	public TestParsing(String input) {
 		f_handle = new File(input);
 		dictionary = new TermDictionary();
 		tokens = new ArrayList<String>();
-		filters = new ArrayList<Filter>();
+		filters = new ArrayList<IFilter>();
 		filters.add(new PunctuationFilter());
 		filters.add(new ReutersFilter());
 	}
@@ -98,7 +98,7 @@ public class TestParsing {
 					      String string_term = term.toString();
 
 					      // Do some post-processing on the string to clean it up
-					      for (Filter f : this.filters) {
+					      for (IFilter f : this.filters) {
 					    	  string_term = f.process(string_term);
 					      }
 
