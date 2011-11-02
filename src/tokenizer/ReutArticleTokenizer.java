@@ -4,7 +4,7 @@ import technical.Logger;
 import documents.AbstractDocument;
 import filters.CaseFoldingFilter;
 import filters.IFilter;
-import filters.PunctuationFilter;
+import filters.CharacterFilter;
 import filters.ReutersFilter;
 
 public class ReutArticleTokenizer extends DocumentTokenizer {
@@ -17,14 +17,14 @@ public class ReutArticleTokenizer extends DocumentTokenizer {
 	public ReutArticleTokenizer(){
 		 super();
 		 filters.add(new ReutersFilter());
-		 filters.add(new PunctuationFilter());
+		 filters.add(new CharacterFilter());
 		 filters.add(new CaseFoldingFilter("down"));
 	}
 	
 	public ReutArticleTokenizer(AbstractDocument article){
 		 super(article);
 		 filters.add(new ReutersFilter());
-		 filters.add(new PunctuationFilter());
+		 filters.add(new CharacterFilter());
 		 filters.add(new CaseFoldingFilter("down"));
 	}
 	
@@ -98,7 +98,7 @@ public class ReutArticleTokenizer extends DocumentTokenizer {
 				}
 			}
 		}
-		document.setTokens(this.tokens);
+		this.document.setTokens(this.tokens);
 	}
 
 }

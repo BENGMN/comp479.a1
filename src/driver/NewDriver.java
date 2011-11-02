@@ -43,7 +43,7 @@ public class NewDriver {
 	    		// make sure we only parse XML files
 	    		if (f.getAbsolutePath().endsWith("xml")) {
 	    			System.out.println("Processing file: "+f.getName());
-	    			InputStream inputStream= new FileInputStream(f);
+	    			InputStream inputStream = new FileInputStream(f);
 	    			Reader reader = new InputStreamReader(inputStream,"UTF-8");
 	    			InputSource is = new InputSource(reader);
 	    			is.setEncoding("UTF-8");
@@ -54,21 +54,17 @@ public class NewDriver {
 	    	
 	    	// Now that the handler is full of articles that need parsing we
 	    	// get to work on that
-	    	//DocumentTokenizer tokenizer = new ReutArticleTokenizer();
+	    	DocumentTokenizer tokenizer = new ReutArticleTokenizer();
 	    	
 	    	for (AbstractDocument d : handler.getDocuments()) {
-	    		new ReutArticleTokenizer(d).parse();
-	    		//tokenizer.setDocument(d);
-	    		//tokenizer.parse();
-	    		System.out.println("Tokenized Document " + d.getTokens());
+	    		tokenizer.setDocument(d);
+	    		tokenizer.parse();
 	    	}
-	    	
-	    	LinkedList<AbstractDocument> d = handler.getDocuments();
-	    	System.out.println("Document Tokens " + d.pop().getBody());
-	    	
-	    	
-	    	// At this point every document in the handlers collection
+
+	    	// At this point every AbstractDocument in the handlers collection
 	    	// should have it's token attribute full of tokens
+	    	// I guess it's time to build an index!
+	    	
 	    } 
 	    
 	    catch (SAXException e) {

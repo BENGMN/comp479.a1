@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import filters.IFilter;
-import filters.PunctuationFilter;
+import filters.CharacterFilter;
 import filters.ReutersFilter;
 
 import technical.Logger;
@@ -21,7 +21,7 @@ public class RoughXML {
 	 */
 	public RoughXML(String path, long file_id) {
 		super(path, file_id);
-		filters.add(new PunctuationFilter());
+		filters.add(new CharacterFilter());
 		filters.add(new ReutersFilter());
 		filters.trimToSize(); // slight optimization
 		

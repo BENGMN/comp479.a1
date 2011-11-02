@@ -23,13 +23,14 @@ public class SAXHandlerReuters extends DefaultHandler {
 	// for each document
 	private boolean at_text = false;
 	private boolean at_title = false;
-	private boolean at_body = false;
+	private boolean at_body = true;
 
-	private int article_id;
+	private int article_id = -1;
 	private String title;
 	private String body;
 	
 	private LinkedList<AbstractDocument> ra = new LinkedList<AbstractDocument>();
+	
 	public SAXHandlerReuters() {}
 	
 	public LinkedList<AbstractDocument> getDocuments() {
@@ -43,6 +44,8 @@ public class SAXHandlerReuters extends DefaultHandler {
 		if (qName.equals("REUTERS")) {
 			// grab the ID from the Reuters header
 			this.article_id = Integer.parseInt(attributes.getValue("NEWID"));
+			this.title = "";
+			this.body = "";
 		}
 
 		if (qName.equalsIgnoreCase("TEXT")) {
@@ -61,11 +64,11 @@ public class SAXHandlerReuters extends DefaultHandler {
 	public void characters(char ch[], int start, int length) throws SAXException {
 		// if we are inside a text tag and we find a title tag
 		if (at_text && at_title) {
-			this.title = new String (ch, start, length);
+			this.title += new String (ch, start, length);
 		}
 		// if we are inside a text and we find a body tag
-		if (at_text && at_body) {
-			this.body = new String(ch, start, length);
+		if (at_text) {
+			this.body += new String(ch, start, length);
 		}
 	}
 	
@@ -79,7 +82,7 @@ public class SAXHandlerReuters extends DefaultHandler {
 			at_text = false;
 			ra.add(new ReutersArticle(this.article_id, this.title, this.body));
 			// DEBUG
-			System.out.println("Parsed article # "+this.article_id);
+			System.out.println("Parsed article # "+this.article_id + "\nTitle: "+this.title+"\nBody: "+this.body);
 			// reset the local vars
 			this.article_id = -1; 
 			this.title = "";

@@ -3,7 +3,7 @@ package driver;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import filters.PunctuationFilter;
+import filters.CharacterFilter;
 import filters.ReutersFilter;
 
 public class TestRegex {

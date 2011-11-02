@@ -6,7 +6,7 @@ public abstract class AbstractDocument {
 
 		private int id;
 		private String body;
-		private LinkedList<String> terms = new LinkedList<String>();
+		private LinkedList<String> tokens = new LinkedList<String>();
 		
 		/**
 		 * Filters are expected to be provided by the sub-classes
@@ -29,10 +29,10 @@ public abstract class AbstractDocument {
 		}
 		
 		public LinkedList<String> getTokens() {
-			return this.terms;
+			return this.tokens;
 		}
 		
 		public void setTokens(LinkedList<String> tokens) {
-			this.terms = tokens;
+			this.tokens = tokens;
 		}
 }

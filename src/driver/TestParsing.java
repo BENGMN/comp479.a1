@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import technical.Logger;
 import filters.IFilter;
-import filters.PunctuationFilter;
+import filters.CharacterFilter;
 import filters.ReutersFilter;
 
 public class TestParsing {
@@ -27,7 +27,7 @@ public class TestParsing {
 		dictionary = new TermDictionary();
 		tokens = new ArrayList<String>();
 		filters = new ArrayList<IFilter>();
-		filters.add(new PunctuationFilter());
+		filters.add(new CharacterFilter());
 		filters.add(new ReutersFilter());
 	}
 	
