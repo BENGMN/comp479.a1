@@ -1,20 +1,14 @@
 package index;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import java.util.TreeMap;
 
 public class TermDictionary {
 
-	private HashMap<String, Long> dictionary = null;
-	private Long term_id = new Long(0);
+	private TreeMap<String, Long> dictionary = null;
+	private long term_id = 0;
 	
 	public TermDictionary() {
-		dictionary = new HashMap<String, Long>();
-	}
-	
-	public TermDictionary(int size) {
-		dictionary = new HashMap<String, Long>(size);
+		dictionary = new TreeMap<String, Long>();
 	}
 	
 	public void add(String term) {
@@ -35,18 +29,25 @@ public class TermDictionary {
 		else return (long)this.dictionary.get(term);
 	}
 	
-	public ArrayList<Long> getAllTermIDs() {
-		ArrayList<Long> allIDs = new ArrayList<Long>(this.dictionary.size());
-		for (Long termID : this.dictionary.values()) {
-			allIDs.add(termID);
+	/**
+	 * @return This returns all of the termID's in the alphabetical order of the terms
+	 */
+	public Long[] getAllTermIDs() {
+		Long[] allIDs = new Long[this.dictionary.size()];
+		int ctr = 0;
+		for (String term : this.dictionary.keySet()) {
+			allIDs[ctr] = this.dictionary.get(term);
+			ctr++;
 		}
 		return allIDs;
 	}
 	
-	public ArrayList<String> getAllTerms() {
-		ArrayList<String> allTerms = new ArrayList<String>(this.dictionary.size());
+	public String[] getAllTerms() {
+		String[] allTerms = new String[this.dictionary.size()];
+		int ctr = 0;
 		for (String term : this.dictionary.keySet()) {
-			allTerms.add(term);
+			allTerms[ctr] = term;
+			ctr++;
 		}
 		return allTerms;
 	}

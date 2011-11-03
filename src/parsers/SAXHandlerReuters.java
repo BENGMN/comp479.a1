@@ -1,12 +1,6 @@
 package parsers;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -82,7 +76,7 @@ public class SAXHandlerReuters extends DefaultHandler {
 			at_text = false;
 			ra.add(new ReutersArticle(this.article_id, this.title, this.body));
 			// DEBUG
-			System.out.println("Parsed article # "+this.article_id + "\nTitle: "+this.title+"\nBody: "+this.body);
+			// System.out.println("Parsed article # "+this.article_id + "\nTitle: "+this.title+"\nBody: "+this.body);
 			// reset the local vars
 			this.article_id = -1; 
 			this.title = "";
@@ -97,7 +91,7 @@ public class SAXHandlerReuters extends DefaultHandler {
 			at_body = false;
 		}
 	}
-	
+	/**
 	public static void main (String[] args) {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -115,4 +109,5 @@ public class SAXHandlerReuters extends DefaultHandler {
 			e.printStackTrace();
 		}
 	}
+	**/
 }

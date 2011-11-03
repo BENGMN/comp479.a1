@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.LinkedList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -18,6 +17,7 @@ import org.xml.sax.SAXException;
 import documents.AbstractDocument;
 
 import parsers.SAXHandlerReuters;
+import spimi.SPIMInvert;
 import tokenizer.DocumentTokenizer;
 import tokenizer.ReutArticleTokenizer;
 
@@ -29,6 +29,8 @@ public class NewDriver {
 	    	String documentCollection = "/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/copies";
 	    	File root = new File(documentCollection);
 	    	File[] all_files = root.listFiles();
+	    	
+	    	System.out.println("All files successfully gathered");
 	    	
 	    	// Create a new SAX Parser for which we have created a custom handler
 	    	// The handler contains a list of AbstractDoucments which have been parsed
@@ -51,6 +53,7 @@ public class NewDriver {
 	    		}
 	    	}
 	    	
+	    	System.out.println("All files have been parsed");
 	    	
 	    	// Now that the handler is full of articles that need parsing we
 	    	// get to work on that
@@ -61,10 +64,31 @@ public class NewDriver {
 	    		tokenizer.parse();
 	    	}
 
+	    	System.out.println("All files have been tokenized");
 	    	// At this point every AbstractDocument in the handlers collection
 	    	// should have it's token attribute full of tokens
 	    	// I guess it's time to build an index!
 	    	
+	    	// create a SPIMI Inverter
+	    	SPIMInvert spimi_inverter = new SPIMInvert();
+	    	
+	    	// Send every single token from all documents into the inverter
+	    	for (AbstractDocument d : handler.getDocuments()) {
+	    		for(String token : d.getTokens()) {
+	    			if (spimi_inverter.addToBlock(token, d.getDocumentID())) {
+	    				// keep iterating and adding
+	    			}
+	    			else {
+	    				spimi_inverter.flushBlock(); // flush the block
+	    				spimi_inverter.getNewBlock(); // get a new one
+	    				spimi_inverter.addToBlock(token, d.getDocumentID()); // add again
+	    			}
+	    		}
+	    	}
+	    	
+	    	System.out.println("All files have gone through the spimi inverter");
+	    	
+	    	//spimi_inverter.mergeBlocks(input_locations, output_location)()
 	    } 
 	    
 	    catch (SAXException e) {

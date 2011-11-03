@@ -8,12 +8,18 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 
-import filters.Punctuation;
-import filters.ReutersGarbage;
+
+import filters.IFilter;
+import filters.PunctuationFilter;
+import filters.ReutersFilter;
+
 
 import technical.Logger;
 
 public class Import {
+
+	IFilter p = new PunctuationFilter();
+	IFilter r = new ReutersFilter();
 	
 	private File tmp = null;
 	
@@ -76,10 +82,10 @@ public class Import {
     	      term.append(data, left, right-left);
 		      String string_term = term.toString();
     	      
+		      
 		      // Do some post-processing on the string to clean it up
-    	      string_term = Punctuation.removeCharFromBeginning(string_term);
-    	      string_term = Punctuation.removeCharFromEnd(string_term);
-              string_term = ReutersGarbage.remove(string_term);
+    	      string_term = p.process(string_term);
+              string_term = r.process(string_term);
               
               // If we're not left with an empty string we add it to the output
 		      if (!string_term.isEmpty()) {

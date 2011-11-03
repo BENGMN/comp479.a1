@@ -1,20 +1,16 @@
 package index;
 
-import java.util.ArrayList;
 import java.util.TreeMap;
-import java.util.HashSet;
-
-import tokenizer.ReutArticleTokenizer;
 
 
 public class PostingList {
 	
-	private TermDictionary internal_dictionary = null;
-	private TreeMap<Long, HashSet<Long>> postings = null;
+	private TermDictionary internal_dictionary = null; // term, termID
+	private TreeMap<Long, Posting> postings = null; // termID, associated posting
 
 	public PostingList() {
 		this.internal_dictionary = new TermDictionary();
-		this.postings = new TreeMap<Long, HashSet<Long>>();
+		this.postings = new TreeMap<Long, Posting>();
 	}
 	
 	public void addToken(String token, long documentID) {
@@ -23,14 +19,14 @@ public class PostingList {
 		// add the token to the dictionary
 			this.internal_dictionary.add(token);
 			// add the token to the postings list and create a new hashset for the docID's
-			this.postings.put(this.internal_dictionary.getTermID(token), new HashSet<Long>());
-			// add the document ID  to the newly created hashset
-			this.postings.get(token).add(documentID);
+			Long termID = this.internal_dictionary.getTermID(token);
+			this.postings.put(termID, new Posting(termID));
+			this.postings.get(termID).add(documentID);
 		}
 		else {
 				// if the term is already present in our internal dictionary
 				// locate the hashset of docID's and append to it.
-				this.postings.get(this.internal_dictionary.getTermID(token)).add(documentID); 
+				this.postings.get(this.internal_dictionary.getTermID(token)).add(documentID);
 		}
 	}
 	
@@ -62,29 +58,40 @@ public class PostingList {
 		return this.internal_dictionary.getTermID(token);
 	}
 	
-	public ArrayList<String> getAllTerms() {
+	/**
+	 * @return by default this method return the list of terms alphabetically sorted
+	 */
+	public String[] getAllTerms() {
 		return this.internal_dictionary.getAllTerms();
 	}
 	
-	public ArrayList<Long> getAllTermIDs() {
+	public Long[] getAllTermIDs() {
 		return this.internal_dictionary.getAllTermIDs();
 	}
 	
 	public void clearPostings() {
 		this.internal_dictionary = new TermDictionary();
-		this.postings = new TreeMap<Long, HashSet<Long>>();
+		this.postings = new TreeMap<Long, Posting>();
 	}
 	
 	public Long[] getPostings(String token) {
-		Long[] postings = (Long[])this.postings.get(token).toArray();
-		return postings;
+		return postings.get(internal_dictionary.getTermID(token)).getAllPostings();
 	}
 	
-	public void addDocument(ReutArticleTokenizer document) {
+	public void mergeLists(PostingList posting_list) {
+		// for every term get all of the doc ID's and add it to the postings list
+		for(String term : posting_list.getAllTerms()) {
+			for(Long docID : posting_list.getPostings(term)) {
+				this.addToken(term, docID);	
+			}
+		}
+	}
+	/**
+	public void addDocument(AbstractDocument document) {
 		//document_set.add(document);
 		
 		// get all of the tokens from the document
-		ArrayList<String> tokens = document.getTokens();
+		LinkedList<String> tokens = document.getTokens();
 		
 		// loop through every token in the document
 		for (String token : tokens) {
@@ -93,16 +100,16 @@ public class PostingList {
 				// add the token to the dictionary
 				this.internal_dictionary.add(token);
 				// add the token to the postings list and create a new hashset for the docID's
-				this.postings.put(this.internal_dictionary.getTermID(token), new HashSet<Long>());
+				this.postings.put(internal_dictionary.getTermID(token), new Posting(internal_dictionary.getTermID(token)));
 				// add the document ID the term appears in to the newly created hashset
-				this.postings.get(token).add(document.getDocumentID());
+				this.postings.get(token).add((long)document.getDocumentID());
 			}
 			else {
 				// if the term is already present in our internal dictionary
 				// locate the hashset of docID's and append to it.
-				this.postings.get(this.internal_dictionary.getTermID(token)).add(document.getDocumentID()); 
+				this.postings.get(this.internal_dictionary.getTermID(token)).add((long)document.getDocumentID()); 
 			}
-		}
-		
-	}	
+		}	
+	}
+	**/	
 }

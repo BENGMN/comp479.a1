@@ -47,7 +47,7 @@ public abstract class DocumentTokenizer {
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(output_path));
 			for(String s : tokens) {
-				out.write(s+" "+document.getArticleID()+"\n");
+				out.write(s+" "+document.getDocumentID()+"\n");
 			}
 			return true;
 		} catch (IOException e) {

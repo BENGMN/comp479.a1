@@ -20,7 +20,7 @@ public abstract class AbstractDocument {
 		
 		public abstract String getAllText();
 		
-		public int getArticleID() {
+		public int getDocumentID() {
 			return this.id;
 		}
 				
