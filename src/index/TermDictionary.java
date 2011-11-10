@@ -11,22 +11,32 @@ public class TermDictionary {
 		dictionary = new TreeMap<String, Long>();
 	}
 	
-	public void add(String term) {
-		if (this.dictionary.get(term) == null) {
+	/**
+	 * 
+	 * @param term
+	 * @return
+	 */
+	public long add(String term) {
+		Long termID = this.dictionary.get(term);
+		if (termID == null) {
 			this.dictionary.put(term, term_id);
+			termID = term_id;
 			term_id++;
 		}
+		return termID;
 	}
 	
 	/**
 	 * Get the termID for any term in the dictionary
 	 * @param term
+	 * @return if the term is not in the dictionary we return -1;
 	 */
 	public long getTermID(String term) {
-		if (this.dictionary.get(term) == null) {
+		Long termID = this.dictionary.get(term);
+		if (termID == null) {
 			return (long) -1;
 		}
-		else return (long)this.dictionary.get(term);
+		else return termID;
 	}
 	
 	/**

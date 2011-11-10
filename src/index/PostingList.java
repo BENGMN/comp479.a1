@@ -14,14 +14,17 @@ public class PostingList {
 	}
 	
 	public void addToken(String token, long documentID) {
+		
+		Long tID = this.internal_dictionary.getTermID(token);
+		
 		// if the token is not part of this postings list dictionary already
-		if (this.internal_dictionary.getTermID(token) == -1) {
+		if (tID == -1) {
 		// add the token to the dictionary
-			this.internal_dictionary.add(token);
-			// add the token to the postings list and create a new hashset for the docID's
-			Long termID = this.internal_dictionary.getTermID(token);
-			this.postings.put(termID, new Posting(termID));
-			this.postings.get(termID).add(documentID);
+			Long termID = this.internal_dictionary.add(token);
+			// add the token to the postings list and add document id to the posting
+			Posting newPosting = new Posting(termID);
+			newPosting.add(documentID);
+			this.postings.put(termID, newPosting);
 		}
 		else {
 				// if the term is already present in our internal dictionary
@@ -31,22 +34,35 @@ public class PostingList {
 	}
 	
 	/**
+	 * If we already know what the termID we can efficiently add the documentID
+	 * @param termID
+	 * @param documentID
+	 */
+	public void addToken(long termID, long documentID) {
+		this.postings.get(termID).add(documentID);
+	}
+	
+	/**
 	 * Use this method to add a token to the dictionary alone
 	 * since no documentID is specified no addition to the postings list is possible
 	 * @param token
 	 */
 	
 	public void addToken(String token) {
-		if (this.internal_dictionary.getTermID(token) == -1) {
+		Long tID = internal_dictionary.getTermID(token);
+		// only add the token if it is not present
+		if (tID == -1) {
 			this.internal_dictionary.add(token);
 		}
 	}
 	
-	public boolean hasToken(String token) {
-		if (this.internal_dictionary.getTermID(token) == -1) {
-			return false;
-		}
-		else return true;
+	/**
+	 * This method checks whether or not the supplied token exists within the internal dictionary
+	 * @param token
+	 * @return the termID of the token is returned if it is in the dictionary, otherwise -1 is returned.
+	 */
+	public long hasToken(String token) {
+		return this.internal_dictionary.getTermID(token);
 	}
 	
 	/**

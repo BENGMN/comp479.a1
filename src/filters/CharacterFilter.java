@@ -2,8 +2,8 @@ package filters;
 
 public class CharacterFilter implements IFilter {
 	
-	private static final String[] CHARS_TO_STRIP_B = {" ", ".", "\"", "(", ")", "?", "*", "+", ",", "-", ":", "<", ">", "{", "}"};
-	private static final String[] CHARS_TO_STRIP_E = {" ", ".", "\"", "(", ")", "?", "*", "+", ",", "-", ":", "<", ">", "{", "}"};
+	private static final String[] CHARS_TO_STRIP_B = {" ", "'", ".", "\"", "(", ")", "!", "?", "*", "+", ",", "-", "_", ":", ";", "<", ">", "{", "}"};
+	private static final String[] CHARS_TO_STRIP_E = {" ", "'", ".", "\"", "(", ")", "!", "?", "*", "+", ",", "-", "_", ":", ";", "<", ">", "{", "}"};
 	
 	public CharacterFilter() {}
 	

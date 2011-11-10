@@ -13,8 +13,8 @@ public abstract class AbstractDocument {
 		 * @param article_id
 		 * @param body
 		 */
-		public AbstractDocument(int article_id, String body) {
-			this.id = article_id;
+		public AbstractDocument(int document_id, String body) {
+			this.id = document_id;
 			this.body = body;	
 		}
 		

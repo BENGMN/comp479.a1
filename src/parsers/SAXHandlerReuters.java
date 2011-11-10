@@ -68,6 +68,7 @@ public class SAXHandlerReuters extends DefaultHandler {
 	
 	/**
 	 * This method is used to turn all the flags for the tags of interest off
+	 * and to pass the data along that we've accumulated somewhere useful
 	 */
 	public void endElement(String uri, String localName,String qName) throws SAXException {
 		
@@ -76,7 +77,7 @@ public class SAXHandlerReuters extends DefaultHandler {
 			at_text = false;
 			ra.add(new ReutersArticle(this.article_id, this.title, this.body));
 			// DEBUG
-			// System.out.println("Parsed article # "+this.article_id + "\nTitle: "+this.title+"\nBody: "+this.body);
+			System.out.println("Parsed article # "+this.article_id);
 			// reset the local vars
 			this.article_id = -1; 
 			this.title = "";

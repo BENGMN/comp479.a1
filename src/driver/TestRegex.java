@@ -16,13 +16,22 @@ public class TestRegex {
 	private static String five = "BC-STANDARD-OIL-&lt;SRD>-TO";
 	private static String six = "&lt;BP>";
 	
+	private static String test = "-`(-|-_'**Saint. Lic-ios	trt";
+	//private static char test ='"';
+	//private static String test1 = test+"he	j";
+	
 	
 	public static void main (String[] args) {
 
 			//Pattern pattern = Pattern.compile(regex);
 			//Matcher matcher = pattern.matcher(six);
+		
+		
+			test = test.replaceAll("[\\.,:;`'\"~_|\\^\\$\\?\\+\\*-<>{}\\[\\]\\(\\)]", "");
+			test = test.split("\\s");
 			
-		System.out.println(ReutersFilter.remove(five));
+			System.out.println(test);
+		
 			//System.out.println(matcher.matches());
 			//System.out.println(matcher.replaceAll(""));
 			
