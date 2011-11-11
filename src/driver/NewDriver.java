@@ -72,44 +72,29 @@ public class NewDriver {
 	    	// should have it's token attribute full of tokens
 	    	// I guess it's time to build an index!
 	    	
-	    	// Let's try using threads
-	    	
-	    	ArrayList<AbstractDocument> docs = new ArrayList<AbstractDocument>(handler.getDocuments().size());
-	    	
-	    	for(AbstractDocument d : handler.getDocuments()) {
-	    		docs.add(d);
-	    	}
-	    	int doc_ctr = docs.size(); 
-	    	
-	    	SPIMInvert spimi1 = null;
-	    	SPIMInvert spimi2 = null;
-	    	
-	    	int i = 0;
-	    	//for(int i = 0; i < (doc_ctr / 2); i++){
-	    		spimi1 = new SPIMInvert("1", docs.get(i).getTokens(), docs.get(i).getDocumentID());
-	    		spimi1.run();
-	    	//}
-	    	
-	    	//for(int i = (doc_ctr / 2); i < doc_ctr; i++){
-	    		spimi2 = new SPIMInvert("2", docs.get(i+1).getTokens(), docs.get(i+1).getDocumentID());
-	    		spimi2.run();
-	    	//}
-	    	
-	    	/**
 	    	// create a SPIMI Inverter
 	    	SPIMInvert spimi_inverter = new SPIMInvert();
 	    	
 	    	// Send every single token from all documents into the inverter
 	    	for (AbstractDocument d : handler.getDocuments()) {
-	    			spimi_inverter.addToBlock(d.getTokens(), d.getDocumentID());
+	    		for(String token : d.getTokens()) {
+	    			if (spimi_inverter.addToBlock(token, d.getDocumentID())) {
+	    				// keep iterating and adding
+	    			}
+	    			else {
+	    				spimi_inverter.flushBlock(); // flush the block
+	    				spimi_inverter.getNewBlock(); // get a new one
+	    				spimi_inverter.addToBlock(token, d.getDocumentID()); // add again
+	    			}
+	    		}
 	    	}
-	    	**/
+	    	
 	    	
 	    	System.out.println("All files have gone through the spimi inverter "+DateUtils.now());
 	    	System.out.println("Begin merging the index "+DateUtils.now());
 	    	
 	    	File input_files = new File(documentCollection+"/index_files");
-	    	spimi1.mergeBlocks(input_files.list(), documentCollection+"/spimi_index");
+	    	spimi_inverter.mergeBlocks(input_files.list(), documentCollection+"/spimi_index/s_index.txt");
 	    	System.out.println("Index Merged "+DateUtils.now());
 	    } 
 	    

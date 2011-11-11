@@ -1,14 +1,19 @@
 package index;
 
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
 
 public class TermDictionary {
 
-	private TreeMap<String, Long> dictionary = null;
+	private HashMap<String, Long> dictionary = null;
 	private long term_id = 0;
 	
 	public TermDictionary() {
-		dictionary = new TreeMap<String, Long>();
+		dictionary = new HashMap<String, Long>();
 	}
 	
 	/**
@@ -40,25 +45,14 @@ public class TermDictionary {
 	}
 	
 	/**
+	 * This method returns all of the terms in the dictionary sorted alphabetically
+	 * This is a time consuming operation and should be used sparingly.
 	 * @return This returns all of the termID's in the alphabetical order of the terms
 	 */
-	public Long[] getAllTermIDs() {
-		Long[] allIDs = new Long[this.dictionary.size()];
-		int ctr = 0;
-		for (String term : this.dictionary.keySet()) {
-			allIDs[ctr] = this.dictionary.get(term);
-			ctr++;
-		}
-		return allIDs;
-	}
 	
-	public String[] getAllTerms() {
-		String[] allTerms = new String[this.dictionary.size()];
-		int ctr = 0;
-		for (String term : this.dictionary.keySet()) {
-			allTerms[ctr] = term;
-			ctr++;
-		}
-		return allTerms;
+	public Collection<String> getAllTerms() {
+	    List<String> sorted = new ArrayList<String>(this.dictionary.keySet());
+	    Collections.sort(sorted);
+	    return sorted;		
 	}
 }

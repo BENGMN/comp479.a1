@@ -36,13 +36,13 @@ public class SPIMInvert implements Runnable {
 		
 	// Member Variables
 	private PostingList postings = null;
-	private static final int BLOCK_SIZE = 32768*10000;
+	private static final int BLOCK_SIZE = 65536*10000;
 	private int bytes_used = 0;
 	private int block_ctr = 0;
 	private int current_block = 0;
+	private long document_id = 0;
 	private final String output_path = "/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/copies/index_files/";
 	private final String index_files_path = "/home/ben/school/COMP 479 (Information Retrieval)/code/reuters/copies/index_files/";
-	private long document_id = 0;
 	private String output_identifier = null;
 	private LinkedList<String> token_stream;
 	
@@ -156,8 +156,8 @@ public class SPIMInvert implements Runnable {
 	 */
 	public void flushBlock() {
 		if (bytes_used > 0) {
-			System.out.println("Flushing block number " + output_identifier+current_block);
-			writeBlockToDisk(output_path+output_identifier+String.valueOf(current_block));
+			System.out.println("Flushing block number "+current_block);
+			writeBlockToDisk(output_path+String.valueOf(current_block));
 		}
 	}
 	

@@ -1,16 +1,17 @@
 package index;
 
-import java.util.TreeMap;
+import java.util.Collection;
+import java.util.HashMap;
 
 
 public class PostingList {
 	
 	private TermDictionary internal_dictionary = null; // term, termID
-	private TreeMap<Long, Posting> postings = null; // termID, associated posting
+	private HashMap<Long, Posting> postings = null; // termID, associated posting
 
 	public PostingList() {
 		this.internal_dictionary = new TermDictionary();
-		this.postings = new TreeMap<Long, Posting>();
+		this.postings = new HashMap<Long, Posting>();
 	}
 	
 	public void addToken(String token, long documentID) {
@@ -77,17 +78,15 @@ public class PostingList {
 	/**
 	 * @return by default this method return the list of terms alphabetically sorted
 	 */
-	public String[] getAllTerms() {
+	public Collection<String> getAllTerms() {
 		return this.internal_dictionary.getAllTerms();
 	}
 	
-	public Long[] getAllTermIDs() {
-		return this.internal_dictionary.getAllTermIDs();
-	}
+
 	
 	public void clearPostings() {
 		this.internal_dictionary = new TermDictionary();
-		this.postings = new TreeMap<Long, Posting>();
+		this.postings = new HashMap<Long, Posting>();
 	}
 	
 	public Long[] getPostings(String token) {
@@ -102,30 +101,4 @@ public class PostingList {
 			}
 		}
 	}
-	/**
-	public void addDocument(AbstractDocument document) {
-		//document_set.add(document);
-		
-		// get all of the tokens from the document
-		LinkedList<String> tokens = document.getTokens();
-		
-		// loop through every token in the document
-		for (String token : tokens) {
-			// if the token is not part of this postings list dictionary already
-			if (this.internal_dictionary.getTermID(token) == -1) {
-				// add the token to the dictionary
-				this.internal_dictionary.add(token);
-				// add the token to the postings list and create a new hashset for the docID's
-				this.postings.put(internal_dictionary.getTermID(token), new Posting(internal_dictionary.getTermID(token)));
-				// add the document ID the term appears in to the newly created hashset
-				this.postings.get(token).add((long)document.getDocumentID());
-			}
-			else {
-				// if the term is already present in our internal dictionary
-				// locate the hashset of docID's and append to it.
-				this.postings.get(this.internal_dictionary.getTermID(token)).add((long)document.getDocumentID()); 
-			}
-		}	
-	}
-	**/	
 }
