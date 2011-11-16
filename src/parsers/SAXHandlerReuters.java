@@ -77,7 +77,7 @@ public class SAXHandlerReuters extends DefaultHandler {
 			at_text = false;
 			ra.add(new ReutersArticle(this.article_id, this.title, this.body));
 			// DEBUG
-			System.out.println("Parsed article # "+this.article_id);
+			//System.out.println("Parsed article # "+this.article_id);
 			// reset the local vars
 			this.article_id = -1; 
 			this.title = "";

@@ -2,35 +2,52 @@ package index;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 
 public class PostingList {
 	
 	private TermDictionary internal_dictionary = null; // term, termID
-	private HashMap<Long, Posting> postings = null; // termID, associated posting
-
+	//private HashMap<Long, Posting> postings = null; // termID, associated posting
+	private HashMap<String, LinkedHashSet<Long>> postings = null; // termID, associated posting
+	
 	public PostingList() {
 		this.internal_dictionary = new TermDictionary();
-		this.postings = new HashMap<Long, Posting>();
+		//this.postings = new HashMap<String, Posting>();
+		this.postings = new HashMap<String, LinkedHashSet<Long>>(); // term , postings [1,2,3,4...]
 	}
 	
-	public void addToken(String token, long documentID) {
+	/**
+	 * This method will return true if the term was already in the postings list
+	 * Either way the term will be added. False just means we made a new entry.
+	 * @param token
+	 * @param documentID
+	 * @return true if the term is present, false if it wasn't
+	 */
+	public boolean addToken(String token, long documentID) {
 		
-		Long tID = this.internal_dictionary.getTermID(token);
+		//Long tID = this.internal_dictionary.getTermID(token);
 		
 		// if the token is not part of this postings list dictionary already
-		if (tID == -1) {
+		//if (tID == -1) {
+		if (!postings.containsKey(token)) {
 		// add the token to the dictionary
-			Long termID = this.internal_dictionary.add(token);
+			//Long termID = this.internal_dictionary.add(token);
 			// add the token to the postings list and add document id to the posting
-			Posting newPosting = new Posting(termID);
-			newPosting.add(documentID);
-			this.postings.put(termID, newPosting);
+			//Posting newPosting = new Posting(termID);
+			//newPosting.add(documentID);
+			//this.postings.put(termID, newPosting);
+			LinkedHashSet<Long> h = new LinkedHashSet<Long>();
+			h.add(documentID);
+			this.postings.put(token,h);
+			return false;
 		}
 		else {
 				// if the term is already present in our internal dictionary
 				// locate the hashset of docID's and append to it.
-				this.postings.get(this.internal_dictionary.getTermID(token)).add(documentID);
+				//this.postings.get(this.internal_dictionary.getTermID(token)).add(documentID);
+				this.postings.get(token).add(documentID);
+				return true;
 		}
 	}
 	
@@ -40,6 +57,7 @@ public class PostingList {
 	 * @param documentID
 	 */
 	public void addToken(long termID, long documentID) {
+		//this.postings.get(termID).add(documentID);
 		this.postings.get(termID).add(documentID);
 	}
 	
@@ -79,18 +97,21 @@ public class PostingList {
 	 * @return by default this method return the list of terms alphabetically sorted
 	 */
 	public Collection<String> getAllTerms() {
-		return this.internal_dictionary.getAllTerms();
+		return this.postings.keySet();
+		//return this.internal_dictionary.getAllTerms();
 	}
 	
 
 	
 	public void clearPostings() {
 		this.internal_dictionary = new TermDictionary();
-		this.postings = new HashMap<Long, Posting>();
+		//this.postings = new HashMap<Long, Posting>();
+		this.postings = new HashMap<String, LinkedHashSet<Long>>();
 	}
 	
-	public Long[] getPostings(String token) {
-		return postings.get(internal_dictionary.getTermID(token)).getAllPostings();
+	public LinkedHashSet<Long> getPostings(String token) {
+		//return postings.get(internal_dictionary.getTermID(token)).getAllPostings();
+		return postings.get(token);
 	}
 	
 	public void mergeLists(PostingList posting_list) {
