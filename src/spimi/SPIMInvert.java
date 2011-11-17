@@ -153,9 +153,9 @@ public class SPIMInvert {
 	 * @return true if the operation was successful
 	 * @throws IOException 
 	 */
-	public void mergeBlocks(String[] input_locations, String output_location) throws IOException {
+	public TreeMap<String, TreeSet<Long>> mergeBlocks(String[] input_locations, String output_location) throws IOException {
 		// clear the local postings list
-		this.postings = new TreeMap<String, TreeSet<Long>>();		
+		postings = new TreeMap<String, TreeSet<Long>>();		
 			
 		// Read in one file at a time and merge it into the local postings list
 		for (int i = 0; i < input_locations.length; i++) {
@@ -164,6 +164,7 @@ public class SPIMInvert {
 			
 		// write the merged postings to disk
 		this.writeBlockToDisk(output_location);
+		return postings;
 	}
 	
 	/**

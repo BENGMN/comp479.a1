@@ -6,6 +6,8 @@ package driver;
 	import java.io.InputStream;
 	import java.io.InputStreamReader;
 	import java.io.Reader;
+    import java.util.TreeMap;
+    import java.util.TreeSet;
 
 	import javax.xml.parsers.ParserConfigurationException;
 	import javax.xml.parsers.SAXParser;
@@ -20,7 +22,7 @@ package driver;
 	import spimi.SPIMInvert;
 	import technical.DateUtils;
 	import tokenizer.DocumentTokenizer;
-	import tokenizer.ReutArticleTokenizer;
+    import tokenizer.ReutArticleTokenizer;
 	
 
 	public class FastDriver {
@@ -87,13 +89,17 @@ package driver;
 		    	System.out.println("Begin merging the indexes\t\t\t"+DateUtils.now());
 		    	
 		    	File input_files = new File(documentCollection+"/index_files");
-		    	spimi.mergeBlocks(input_files.list(), documentCollection+"/spimi_index/s_index.txt");
-		    	System.out.println("Index Merged "+DateUtils.now());
+		    	TreeMap<String, TreeSet<Long>> complete_index = spimi.mergeBlocks(input_files.list(), documentCollection+"/spimi_index/s_index.txt");
+		    	tokenizer.getStats().setDistinctTerms(complete_index.size());
+		    	
+		    	
+		    	System.out.println("Index Merged\t\t\t\t\t"+DateUtils.now());
 		    	System.out.println("################ Statistics ################");
-		    	System.out.println("Number of Files\t\t"+tokenizer.getStats().getFiles());
-		    	System.out.println("Number of Documents\t"+tokenizer.getStats().getDocuments());
-		    	System.out.println("Number of Terms\t\t"+tokenizer.getStats().getTerms());
-		    	System.out.println("Number of Tokens\t"+tokenizer.getStats().getTokens());
+		    	System.out.println("Number of Files\t\t\t"+tokenizer.getStats().getFiles());
+		    	System.out.println("Number of Documents\t\t"+tokenizer.getStats().getDocuments());
+		    	System.out.println("Number of Terms\t\t\t"+tokenizer.getStats().getTerms());
+		    	System.out.println("Number of NonPosPostings\t"+tokenizer.getStats().getNonPosPostings());
+		    	System.out.println("Number of Distinct Terms\t"+tokenizer.getStats().getDistinctTerms());
 		    } 
 		    
 		    catch (SAXException e) {

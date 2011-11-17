@@ -3,8 +3,11 @@ package tokenizer;
 import spimi.SPIMInvert;
 import filters.CaseFoldingFilter;
 import filters.IFilter;
+import filters.NumberFilter;
+import filters.PorterStemmerFilter;
 import filters.PunctuationFilter;
 import filters.ReutersFilter;
+import filters.StopWordsFilter;
 
 public class ReutArticleTokenizer extends DocumentTokenizer {
 	/** DIRECTLY ACCESSIBLE ATTRIBUTES OF THE PARENT CLASS
@@ -21,6 +24,10 @@ public class ReutArticleTokenizer extends DocumentTokenizer {
 		 filters.add(new ReutersFilter());
 		 filters.add(new PunctuationFilter());
 		 filters.add(new CaseFoldingFilter("down"));
+		 filters.add(new NumberFilter());
+		 filters.add(new StopWordsFilter(30));
+		 filters.add(new StopWordsFilter(174));
+		 filters.add(new PorterStemmerFilter());
 		 this.spimi = spimi;
 	}
 	
@@ -34,7 +41,7 @@ public class ReutArticleTokenizer extends DocumentTokenizer {
 		String[] terms = document.getAllText().split("\\s");
 		
 		// count the number of terms before filtering
-		no_tokens_before_filters = terms.length;
+		no_tokens_before_filters += terms.length;
 		
 		// for every term apply the filter then add it to the index
 		for (String t : terms) {
@@ -47,12 +54,12 @@ public class ReutArticleTokenizer extends DocumentTokenizer {
 			if (!t.isEmpty()) {
 				tokens.add(t);
 				spimi.addToBlock(t, document.getDocumentID());
-				no_tokens_after_filters += 1; // increment the number of token after parsing
+				no_tokens_after_filters++;
 			}
 		}
 		
 		// We keep a running total for all documents in the collection
 		stats.setTerms(stats.getTerms()+terms.length);
-		stats.setTokens(stats.getTokens()+no_tokens_after_filters);
+		stats.setNonPosPostings(stats.getNonPosPostings()+no_tokens_after_filters); 
 	}
 }
