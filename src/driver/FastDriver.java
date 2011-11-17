@@ -33,8 +33,6 @@ package driver;
 		    	File root = new File(documentCollection);
 		    	File[] all_files = root.listFiles();
 		    	
-		    	System.out.println("All files successfully gathered "+DateUtils.now());
-		    	
 		    	// Create a new SAX Parser for which we have created a custom handler
 		    	// The handler contains a list of AbstractDoucments which have been parsed
 		    	// out of the file specified in the parse function
@@ -44,6 +42,10 @@ package driver;
 		    	
 		    	// Now that we have a list of files and a parser we can parse them
 		    	// and place each article into it's own object which we can then tokenize
+		    	
+		    	System.out.println("Begin gathering and parsing all files \t\t"+DateUtils.now());
+		    	int file_ctr = 0;
+		    	
 		    	for (File f : all_files) {
 		    		// make sure we only parse XML files
 		    		if (f.getAbsolutePath().endsWith("xml")) {
@@ -53,51 +55,45 @@ package driver;
 		    			InputSource is = new InputSource(reader);
 		    			is.setEncoding("UTF-8");
 		    			saxParser.parse(is, handler);
+		    			file_ctr++;
 		    		}
 		    	}
-		    	
-		    	System.out.println("All files have been parsed "+DateUtils.now());
+		    	System.out.println(file_ctr+" files successfully gathered\t\t\t"+DateUtils.now());
+		    	System.out.println(handler.getDocuments().size()+" articles have been parsed\t\t\t"+DateUtils.now());
 		    	
 		    	// Now that the handler is full of articles that need parsing we
-		    	// get to work on that
-		    	DocumentTokenizer tokenizer = new ReutArticleTokenizer();
+		    	// get to work on that and we add the items to our SPIMI index from within the tokenizer for speed
 		    	
+		    	SPIMInvert spimi = new SPIMInvert();
+		    	
+		    	// Create a tokenizer and pass the SPIMI object
+		    	DocumentTokenizer tokenizer = new ReutArticleTokenizer(spimi);
+		    	
+		    	// Add some stats in
+		    	tokenizer.getStats().setFiles(file_ctr);
+		    	tokenizer.getStats().setDocuments(handler.getDocuments().size());
+		    	
+		    	System.out.println("Begin Indexing Process\t\t\t\t"+DateUtils.now());
+		    	
+		    	// Loop through every document, tokenize it and add it to the index
 		    	for (AbstractDocument d : handler.getDocuments()) {
 		    		tokenizer.setDocument(d);
-		    		tokenizer.parse();		    		
+		    		tokenizer.parse(); 				// this adds to the index too
 		    	}
+		    	
+		    	spimi.flushBlock(); // just in case we didn't reach the buffer limit
 
-		    	System.out.println("All files have been tokenized "+DateUtils.now());
-		    	
-		    	// At this point every AbstractDocument in the handlers collection
-		    	// should have it's token attribute full of tokens
-		    	// I guess it's time to build an index!
-		    	
-		    	
-		    	// create a SPIMI Inverter
-		    	SPIMInvert spimi_inverter = new SPIMInvert(handler.getDocuments());
-		    	
-		    	spimi_inverter.invert();
-		    	// Send every single token from all documents into the inverter
-		    	/*for (AbstractDocument d : handler.getDocuments()) {
-		    		for(String token : d.getTokens()) {
-		    			if (spimi_inverter.addToBlock(token, d.getDocumentID())) {
-		    				// keep iterating and adding
-		    			}
-		    			else {
-		    				spimi_inverter.flushBlock(); // flush the block
-		    				spimi_inverter.getNewBlock(); // get a new one
-		    				spimi_inverter.addToBlock(token, d.getDocumentID()); // add again
-		    			}
-		    		}
-		    	}
-		    	*/
-		    	System.out.println("All files have gone through the spimi inverter "+DateUtils.now());
-		    	System.out.println("Begin merging the index "+DateUtils.now());
+		    	System.out.println("All files have been tokenized and Indexed\t"+DateUtils.now());
+		    	System.out.println("Begin merging the indexes\t\t\t"+DateUtils.now());
 		    	
 		    	File input_files = new File(documentCollection+"/index_files");
-		    	spimi_inverter.mergeBlocks(input_files.list(), documentCollection+"/spimi_index/s_index.txt");
+		    	spimi.mergeBlocks(input_files.list(), documentCollection+"/spimi_index/s_index.txt");
 		    	System.out.println("Index Merged "+DateUtils.now());
+		    	System.out.println("################ Statistics ################");
+		    	System.out.println("Number of Files\t\t"+tokenizer.getStats().getFiles());
+		    	System.out.println("Number of Documents\t"+tokenizer.getStats().getDocuments());
+		    	System.out.println("Number of Terms\t\t"+tokenizer.getStats().getTerms());
+		    	System.out.println("Number of Tokens\t"+tokenizer.getStats().getTokens());
 		    } 
 		    
 		    catch (SAXException e) {
