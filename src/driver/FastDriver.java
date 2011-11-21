@@ -6,6 +6,10 @@ package driver;
 	import java.io.InputStream;
 	import java.io.InputStreamReader;
 	import java.io.Reader;
+	import java.util.ArrayList;
+	import java.util.HashMap;
+	import java.util.LinkedList;
+	import java.util.Scanner;
     import java.util.TreeMap;
     import java.util.TreeSet;
 
@@ -17,12 +21,20 @@ package driver;
 	import org.xml.sax.SAXException;
 
 	import documents.AbstractDocument;
+import filters.CaseFoldingFilter;
+	import filters.IFilter;
+import filters.NumberFilter;
+import filters.PorterStemmerFilter;
+import filters.PunctuationFilter;
+import filters.ReutersFilter;
+import filters.StopWordsFilter;
 
 	import parsers.SAXHandlerReuters;
 	import spimi.SPIMInvert;
 	import technical.DateUtils;
+	import technical.Merge;
 	import tokenizer.DocumentTokenizer;
-    import tokenizer.ReutArticleTokenizer;
+import tokenizer.ReutArticleTokenizer;
 	
 
 	public class FastDriver {
@@ -100,7 +112,80 @@ package driver;
 		    	System.out.println("Number of Terms\t\t\t"+tokenizer.getStats().getTerms());
 		    	System.out.println("Number of NonPosPostings\t"+tokenizer.getStats().getNonPosPostings());
 		    	System.out.println("Number of Distinct Terms\t"+tokenizer.getStats().getDistinctTerms());
-		    } 
+		    	
+		     	LinkedList<IFilter> filters = new LinkedList<IFilter>();
+		    	filters.add(new ReutersFilter());
+				filters.add(new PunctuationFilter());
+				filters.add(new CaseFoldingFilter("down"));
+				filters.add(new NumberFilter());
+				filters.add(new StopWordsFilter(30));
+				filters.add(new StopWordsFilter(174));
+				filters.add(new PorterStemmerFilter());
+		    	
+		    	
+		    	
+		    	while(true) {
+			    	
+			    	System.out.println("\nReady to accept a query");
+			    	
+			    	Scanner keyboard = new Scanner (System.in);
+			    	String query = keyboard.nextLine();
+			    	String[] q_terms = query.split("\\s");
+			    	
+			    	// Run the query terms through all of the same filters we used to build the index
+			    	for(int i = 0; i < q_terms.length; i++) {
+			    		for (IFilter f : filters) {
+			    			q_terms[i] = f.process(q_terms[i]);
+			    		}
+			    	}
+			    	
+			    	System.out.println("List of matching documents");
+			    	
+			    	// Perform some retrieval now
+			    	if (q_terms.length == 1) {
+			    		for(Long i : complete_index.get(q_terms[0])) {
+			    			System.out.print(" "+i);
+			    		}
+			    	}
+			    	else {
+				    	// Create a Map to store the postings lists of the query terms
+				    	HashMap<String, TreeSet<Long>> matching_docs = new HashMap<String, TreeSet<Long>>();
+				    	
+				    	// iterate through each query term and add it's postings list to the matching docs
+				    	for(String s : q_terms) {
+				    		// Make sure the query term is not empty
+				    		if (!s.equals("")) {
+				    			matching_docs.put(s, complete_index.get(s));
+				    		}
+				    	}
+				    	
+				    	// Time to take the union of the results
+				    	TreeSet<Long> union_set = new TreeSet<Long>();
+				    	
+				    	// get a handle to postings lists that have been matched
+				    	ArrayList<String> keys = new ArrayList<String>();
+				    	for(String s : matching_docs.keySet()) {
+				    		keys.add(s);
+				    	}
+				    	
+				    	// iterate through the postings lists merging them
+				    	for(int i = 0; i < keys.size() -1; i++) {
+				    		if (i == 0) {
+				    			union_set = Merge.PostingsList(matching_docs.get(keys.get(i)), matching_docs.get(keys.get(i+1))); 
+				    		}
+				    		else {
+				    			union_set = Merge.PostingsList(union_set, matching_docs.get(keys.get(i+1)));
+				    		}
+				    	}
+				    	
+				    	// print the results to screen
+				    	for (Long i : union_set) {
+				    		// get the postings list
+				    		System.out.print(" "+i);
+				    	}
+			    	}
+		    	}
+		    }
 		    
 		    catch (SAXException e) {
 				// TODO Auto-generated catch block
