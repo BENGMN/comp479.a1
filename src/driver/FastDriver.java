@@ -32,7 +32,7 @@ import filters.StopWordsFilter;
 	import parsers.SAXHandlerReuters;
 	import spimi.SPIMInvert;
 	import technical.DateUtils;
-	import technical.Merge;
+	import technical.SetOperation;
 	import tokenizer.DocumentTokenizer;
 import tokenizer.ReutArticleTokenizer;
 	
@@ -171,10 +171,10 @@ import tokenizer.ReutArticleTokenizer;
 				    	// iterate through the postings lists merging them
 				    	for(int i = 0; i < keys.size() -1; i++) {
 				    		if (i == 0) {
-				    			union_set = Merge.PostingsList(matching_docs.get(keys.get(i)), matching_docs.get(keys.get(i+1))); 
+				    			union_set = SetOperation.UnionPL(matching_docs.get(keys.get(i)), matching_docs.get(keys.get(i+1))); 
 				    		}
 				    		else {
-				    			union_set = Merge.PostingsList(union_set, matching_docs.get(keys.get(i+1)));
+				    			union_set = SetOperation.UnionPL(union_set, matching_docs.get(keys.get(i+1)));
 				    		}
 				    	}
 				    	
