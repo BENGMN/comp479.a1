@@ -10,6 +10,7 @@ package driver;
 	import java.util.HashMap;
 	import java.util.LinkedList;
 	import java.util.Scanner;
+import java.util.Set;
     import java.util.TreeMap;
     import java.util.TreeSet;
 
@@ -30,11 +31,12 @@ package driver;
 	import filters.StopWordsFilter;
 
 	import parsers.SAXHandlerReuters;
+import retrieval.BooleanRetrieval;
 	import spimi.SPIMInvert;
 	import tokenizer.DocumentTokenizer;
 	import tokenizer.ReutArticleTokenizer;
 	import utils.DateUtils;
-	import utils.SetOperation;
+import utils.SetOperation;
 	
 
 	public class FastDriver {
@@ -91,8 +93,8 @@ package driver;
 		    	System.out.println("Begin Indexing Process\t\t\t\t"+DateUtils.now());
 		    	
 		    	// Loop through every document, tokenize it and add it to the index
-		    	for (AbstractDocument d : handler.getDocuments()) {
-		    		tokenizer.setDocument(d);
+		    	for (Long d : handler.getDocuments().keySet()) {
+		    		tokenizer.setDocument(handler.getDocuments().get(d));
 		    		tokenizer.parse(); 				// this adds to the index too
 		    	}
 		    	
@@ -167,28 +169,12 @@ package driver;
 				    	}
 				    	
 				    	// Time to take the union of the results
-				    	TreeSet<Long> union_set = new TreeSet<Long>();
-				    	
-				    	// get a handle to postings lists that have been matched
-				    	ArrayList<String> keys = new ArrayList<String>();
-				    	for(String s : matching_docs.keySet()) {
-				    		keys.add(s);
-				    	}
-				    	
-				    	// iterate through the postings lists merging them
-				    	for(int i = 0; i < keys.size() -1; i++) {
-				    		if (i == 0) {
-				    			union_set = SetOperation.UnionPL(matching_docs.get(keys.get(i)), matching_docs.get(keys.get(i+1))); 
-				    		}
-				    		else {
-				    			union_set = SetOperation.UnionPL(union_set, matching_docs.get(keys.get(i+1)));
-				    		}
-				    	}
+				    	TreeSet<Long> union = (TreeSet<Long>)BooleanRetrieval.Intersection(matching_docs);
 				    	
 				    	// print the results to screen
-				    	for (Long i : union_set) {
+				    	for (Long i : union) {
 				    		// get the postings list
-				    		System.out.print(" "+i);
+				    		System.out.println("Document ID "+i+"\nContent "+ handler.getDocuments().get(i).getBody()+"\n--------------------------------------------\n");
 				    	}
 			    	}
 		    	}

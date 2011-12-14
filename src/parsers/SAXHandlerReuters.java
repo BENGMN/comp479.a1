@@ -1,5 +1,6 @@
 package parsers;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.xml.sax.Attributes;
@@ -23,11 +24,11 @@ public class SAXHandlerReuters extends DefaultHandler {
 	private String title;
 	private String body;
 	
-	private LinkedList<AbstractDocument> ra = new LinkedList<AbstractDocument>();
+	private HashMap<Long, AbstractDocument> ra = new HashMap<Long, AbstractDocument>(); // document_id, reference_to_document
 	
 	public SAXHandlerReuters() {}
 	
-	public LinkedList<AbstractDocument> getDocuments() {
+	public HashMap<Long, AbstractDocument> getDocuments() {
 		return this.ra;
 	}
 	
@@ -75,7 +76,7 @@ public class SAXHandlerReuters extends DefaultHandler {
 		// When this is true we are at the end of an article
 		if (qName.equalsIgnoreCase("TEXT")) {
 			at_text = false;
-			ra.add(new ReutersArticle(this.article_id, this.title, this.body));
+			ra.put((long)this.article_id, new ReutersArticle(this.article_id, this.title, this.body));
 			// DEBUG
 			//System.out.println("Parsed article # "+this.article_id);
 			// reset the local vars
