@@ -1,4 +1,4 @@
-package technical;
+package utils;
 
 import java.util.TreeSet;
 

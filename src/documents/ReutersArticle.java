@@ -12,7 +12,7 @@ public class ReutersArticle extends AbstractDocument {
 	@Override
 	public String getAllText() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.title + " ");
+		//sb.append(this.title + " ");
 		sb.append(super.getBody());
 		return sb.toString();
 	}

@@ -21,20 +21,20 @@ package driver;
 	import org.xml.sax.SAXException;
 
 	import documents.AbstractDocument;
-import filters.CaseFoldingFilter;
+	import filters.CaseFoldingFilter;
 	import filters.IFilter;
-import filters.NumberFilter;
-import filters.PorterStemmerFilter;
-import filters.PunctuationFilter;
-import filters.ReutersFilter;
-import filters.StopWordsFilter;
+	import filters.NumberFilter;
+	import filters.PorterStemmerFilter;
+	import filters.PunctuationFilter;
+	import filters.ReutersFilter;
+	import filters.StopWordsFilter;
 
 	import parsers.SAXHandlerReuters;
 	import spimi.SPIMInvert;
-	import technical.DateUtils;
-	import technical.SetOperation;
 	import tokenizer.DocumentTokenizer;
-import tokenizer.ReutArticleTokenizer;
+	import tokenizer.ReutArticleTokenizer;
+	import utils.DateUtils;
+	import utils.SetOperation;
 	
 
 	public class FastDriver {
@@ -44,6 +44,7 @@ import tokenizer.ReutArticleTokenizer;
 		    	    	
 				// Get a list of files that need to be parsed
 		    	String documentCollection = "/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/copies";
+		    	//String documentCollectionTest = "/media/320/Users/Ben/School/Concordia University/Classes/COMP 479 (Information Retrieval)/code/reuters/copies/test";
 		    	File root = new File(documentCollection);
 		    	File[] all_files = root.listFiles();
 		    	
@@ -72,7 +73,7 @@ import tokenizer.ReutArticleTokenizer;
 		    			file_ctr++;
 		    		}
 		    	}
-		    	System.out.println(file_ctr+" files successfully gathered\t\t\t"+DateUtils.now());
+		    	
 		    	System.out.println(handler.getDocuments().size()+" articles have been parsed\t\t\t"+DateUtils.now());
 		    	
 		    	// Now that the handler is full of articles that need parsing we
@@ -101,7 +102,13 @@ import tokenizer.ReutArticleTokenizer;
 		    	System.out.println("Begin merging the indexes\t\t\t"+DateUtils.now());
 		    	
 		    	File input_files = new File(documentCollection+"/index_files");
-		    	TreeMap<String, TreeSet<Long>> complete_index = spimi.mergeBlocks(input_files.list(), documentCollection+"/spimi_index/s_index.txt");
+		    	String[] fq_input_files = new String[(int) input_files.list().length];
+		    	
+		    	for (int i = 0; i < input_files.list().length; i++) {
+		    		fq_input_files[i] = documentCollection+"/index_files/"+input_files.list()[i];
+		    	}
+		    	
+		    	TreeMap<String, TreeSet<Long>> complete_index = spimi.mergeBlocks(fq_input_files, documentCollection+"/spimi_index/s_index.txt");
 		    	tokenizer.getStats().setDistinctTerms(complete_index.size());
 		    	
 		    	

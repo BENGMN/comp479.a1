@@ -11,11 +11,13 @@ import filters.StopWordsFilter;
 
 public class ReutArticleTokenizer extends DocumentTokenizer {
 	/** DIRECTLY ACCESSIBLE ATTRIBUTES OF THE PARENT CLASS
-	AbstractDocument article
-	LinkedList<IFilter> filters
-	LinkedList<String> tokens
-	protected long no_tokens_before_filters = 0;
-	protected long no_tokens_after_filters = 0;
+	*
+	*	AbstractDocument article
+	*	LinkedList<IFilter> filters
+	*	LinkedList<String> tokens
+	*	long no_tokens_before_filters
+	*	long no_tokens_after_filters
+	*
 	**/
 	private SPIMInvert spimi = null; // store a local reference to the SPIMI object
 	

@@ -1,10 +1,11 @@
-package technical;
+package utils;
 
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class DateUtils {
-  public static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
+  public static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:s:S";
+  //System.currentTimeMillis();
   
   public DateUtils(){}
 

@@ -51,7 +51,6 @@ public class SPIMInvert {
 	/**
 	 * Add tokens to the block one at a time
 	 * @param token a term to placed into the index
-	 * @return true if successfully inserted, returns false when the block is full
 	 */
 	public void addToBlock(String token, long documentID) {
 		if (bytes_used + 24 <= BLOCK_SIZE) {
@@ -120,7 +119,7 @@ public class SPIMInvert {
 		try {
 			
 			// get a handle to the input file
-			FileReader inputStream = new FileReader(index_files_path+location);
+			FileReader inputStream = new FileReader(location);
 			BufferedReader in = new BufferedReader(inputStream);
 		
 			// set up some instance vars

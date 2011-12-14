@@ -2,10 +2,10 @@ package statistics;
 
 public class CorpusStats {
 
-	private long files    = 0; // # of files in the collection
-	private long documents = 0; // # of documents in the collection
-	private long terms    = 0; // # of terms after parsing before filtering
-	private long tokens   = 0; // # of tokens after filtering
+	private long files    	= 0; 	// # of files in the collection
+	private long documents 	= 0; 	// # of documents in the collection
+	private long terms    	= 0; 	// # of terms after parsing before filtering
+	private long tokens   	= 0; 	// # of tokens after filtering
 	private long nonPosPostings = 0;
 	private long distinctTerms = 0;
 	
